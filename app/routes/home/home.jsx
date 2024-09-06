@@ -1,9 +1,3 @@
-import gamestackTexture2Large from '~/assets/gamestack-list-large.jpg';
-import gamestackTexture2Placeholder from '~/assets/gamestack-list-placeholder.jpg';
-import gamestackTexture2 from '~/assets/gamestack-list.jpg';
-import gamestackTextureLarge from '~/assets/gamestack-login-large.jpg';
-import gamestackTexturePlaceholder from '~/assets/gamestack-login-placeholder.jpg';
-import gamestackTexture from '~/assets/gamestack-login.jpg';
 import sliceTexturePlaceholder from '~/assets/slice-app-placeholder.jpg';
 import sliceTexture from '~/assets/slice-app.jpg';
 import sprTextureLarge from '~/assets/spr-lesson-builder-dark-large.jpg';
@@ -50,12 +44,11 @@ export const Home = () => {
   const [scrollIndicatorHidden, setScrollIndicatorHidden] = useState(false);
   const intro = useRef();
   const projectOne = useRef();
-  const projectTwo = useRef();
   const projectThree = useRef();
   const details = useRef();
 
   useEffect(() => {
-    const sections = [intro, projectOne, projectTwo, projectThree, details];
+    const sections = [intro, projectOne, projectThree, details];
 
     const sectionObserver = new IntersectionObserver(
       (entries, observer) => {
@@ -102,8 +95,8 @@ export const Home = () => {
         sectionRef={projectOne}
         visible={visibleSections.includes(projectOne.current)}
         index={1}
-        title="Designing the future of education"
-        description="Designing a platform to help educators build better online courseware"
+        title="Non-digital projects"
+        description="This list includes projects I've completed but haven't yet released a public demo for"
         buttonText="View project"
         buttonLink="/projects/smart-sparrow"
         model={{
@@ -119,34 +112,9 @@ export const Home = () => {
       />
       <ProjectSummary
         id="project-2"
-        alternate
-        sectionRef={projectTwo}
-        visible={visibleSections.includes(projectTwo.current)}
-        index={2}
-        title="Video game progress tracking"
-        description="Design and development for a video game tracking app built in React Native"
-        buttonText="View website"
-        buttonLink="https://gamestack.hamishw.com"
-        model={{
-          type: 'phone',
-          alt: 'App login screen',
-          textures: [
-            {
-              srcSet: `${gamestackTexture} 375w, ${gamestackTextureLarge} 750w`,
-              placeholder: gamestackTexturePlaceholder,
-            },
-            {
-              srcSet: `${gamestackTexture2} 375w, ${gamestackTexture2Large} 750w`,
-              placeholder: gamestackTexture2Placeholder,
-            },
-          ],
-        }}
-      />
-      <ProjectSummary
-        id="project-3"
         sectionRef={projectThree}
         visible={visibleSections.includes(projectThree.current)}
-        index={3}
+        index={2}
         title="Clinical Coding Toolkit for Healthcare"
         description="An advanced clinical coding management system.This system supports doctors, healthcare managers, and professionals in the healthcare sector, optimizing workflows and enhancing efficiency in managing and referencing disease coding and medical issues."
         buttonText="View project"

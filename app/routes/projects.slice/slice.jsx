@@ -55,12 +55,12 @@ export const Slice = () => {
         <ProjectSection padding="top">
           <ProjectSectionContent>
             <ProjectImage
-              srcSet={`${sliceApp} 800w, ${sliceApp} 1920w`}
-              width={800}
-              height={500}
+              srcSet={`${sliceApp} 400w, ${sliceApp} 800w, ${sliceApp} 1200w`}
+              width={400}
+              height={250}
               placeholder={sliceAppPlaceholder}
               alt="ICD."
-              sizes={`(max-width: ${media.mobile}px) 100vw, (max-width: ${media.tablet}px) 90vw, 80vw`}
+              sizes={`(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 60vw`}
               borderRadius={15}
             />
           </ProjectSectionContent>
@@ -74,12 +74,12 @@ export const Slice = () => {
               </ProjectSectionText>
             </ProjectTextRow>
             <Image
-              srcSet={`${sliceSlides} 800w, ${sliceSlides} 1920w`}
-              width={800}
-              height={500}
+              srcSet={`${sliceSlides} 400w, ${sliceSlides} 800w, ${sliceSlides} 1200w`}
+              width={400}
+              height={250}
               placeholder={sliceSlidesPlaceholder}
               alt="The new My Slides tab in slice, showing annotated and favorited slides."
-              sizes={`(max-width: ${media.mobile}px) 500px, (max-width: ${media.tablet}px) 800px, 1000px`}
+              sizes={`(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 60vw`}
               borderRadius={15}
             />
           </ProjectSectionContent>
