@@ -78,6 +78,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   height={1580}
                   sizes={`(max-width: ${media.mobile}px) 100vw, 480px`}
                   alt="Me at Germany"
+                  borderRadius={15}
                 />
                 <svg className={styles.svg} data-visible={visible} viewBox="0 0 136 766">
                   <use href={`${katakana}#katakana-profile`} />

@@ -1,0 +1,111 @@
+---
+title: "You (probably) don't need traditional CSS: Try Tailwind or Bootstrap 5"
+abstract: Tailwind CSS and Bootstrap 5 offer powerful alternatives to traditional CSS. Here’s why you might want to switch and how these frameworks can simplify your styling approach.
+date: '2024-09-06'
+banner: /static/tw.jpg
+---
+
+When I first started using traditional CSS and pre-processors like SCSS, I was drawn to the flexibility and control they provided. However, as my projects grew in complexity, I found myself longing for a more streamlined approach. That’s when I discovered Tailwind CSS and Bootstrap 5—two frameworks that have revolutionized my styling workflow. Here’s why you might not need traditional CSS and how these frameworks can simplify your development process.
+
+## Where We Are Today
+Before diving into the benefits of Tailwind CSS and Bootstrap 5, let’s briefly compare them with traditional CSS and pre-processors. I’ll use basic examples to highlight how these frameworks address common styling challenges.
+
+## Traditional CSS: A Familiar Approach
+Using traditional CSS and pre-processors like SCSS often involves writing custom stylesheets and managing class names manually. While this method provides great control, it can become cumbersome with larger projects.
+
+Example with Traditional CSS
+Consider a button component styled with traditional CSS:
+
+```js
+function Button({ color, size, primary, children }) {
+  return (
+    <button className={`button button--${size} ${primary ? 'button--primary' : ''}`} 
+            style={{ backgroundColor: color }}>
+      {children}
+    </button>
+  );
+}
+```
+
+```scss
+.button {
+  border: 0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: dimgrey;
+  background-color: whitesmoke;
+
+  &--primary {
+    background-color: #007bff;
+  }
+
+  &--small {
+    height: 30px;
+  }
+
+  &--medium {
+    height: 40px;
+  }
+
+  &--large {
+    height: 60px;
+  }
+}
+
+```
+
+This approach works but can quickly become difficult to manage as your project scales.
+
+## Tailwind CSS: Utility-First Styling
+Tailwind CSS is a utility-first framework that provides a comprehensive set of utility classes for styling elements. Instead of writing custom CSS, you apply utility classes directly in your HTML or JSX. This method promotes consistency and speeds up development.
+
+Example with Tailwind CSS
+Here’s how you can style a button component using Tailwind CSS:
+
+```jsx
+function Button({ color, size, primary, children }) {
+  const baseClasses = "border-0 rounded px-3 py-2 text-sm text-gray-800";
+  const colorClasses = primary ? "bg-blue-500" : `bg-[${color}]`;
+  const sizeClasses = size === 'small' ? "h-8" : size === 'medium' ? "h-10" : "h-12";
+
+  return (
+    <button className={`${baseClasses} ${colorClasses} ${sizeClasses}`}>
+      {children}
+    </button>
+  );
+}
+
+```
+
+With Tailwind CSS, you avoid writing custom CSS altogether. Utility classes are designed to be composable and easy to use, ensuring a consistent design system across your project.
+
+## Bootstrap 5: Comprehensive Component Library
+Bootstrap 5 is a widely-used component library that provides pre-styled components and utilities. It offers a more opinionated approach than Tailwind, with built-in components that you can use out of the box.
+
+Example with Bootstrap 5
+Here’s how you can style a button component using Bootstrap 5:
+
+```jsx
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+function Button({ color, size, primary, children }) {
+  const buttonClass = `btn ${primary ? 'btn-primary' : `btn-${color}`} 
+  ${size === 'small' ? 'btn-sm' : size === 'medium' ? 'btn-md' : 'btn-lg'}`;
+
+  return (
+    <button className={buttonClass}>
+      {children}
+    </button>
+  );
+}
+
+```
+
+Bootstrap’s pre-built classes and components simplify the styling process and provide a responsive, consistent design.
+
+## Conclusion
+While traditional CSS and pre-processors have their place, modern frameworks like Tailwind CSS and Bootstrap 5 offer compelling advantages. They streamline the styling process, enhance consistency, and reduce development time. Whether you choose Tailwind’s utility-first approach or Bootstrap’s comprehensive components, these frameworks can simplify your workflow and help you build better web applications.
+
+Feel free to explore Tailwind CSS and Bootstrap 5 to see how they can fit into your projects. You might find that they make your styling process more efficient and enjoyable.
+

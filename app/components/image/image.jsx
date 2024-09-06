@@ -17,6 +17,7 @@ export const Image = ({
   src: baseSrc,
   srcSet,
   placeholder,
+  borderRadius,
   ...rest
 }) => {
   const [loaded, setLoaded] = useState(false);
@@ -36,7 +37,8 @@ export const Image = ({
       data-reveal={reveal}
       data-raised={raised}
       data-theme={theme}
-      style={cssProps({ delay: numToMs(delay) }, style)}
+      style={cssProps({ delay: numToMs(delay), borderRadius: borderRadius ? `${borderRadius}px` : undefined }, style)}
+      // style={cssProps({ delay: numToMs(delay) }, style)}
       ref={containerRef}
     >
       <ImageElements
@@ -48,6 +50,7 @@ export const Image = ({
         src={src}
         srcSet={srcSet}
         placeholder={placeholder}
+        borderRadius={borderRadius}
         {...rest}
       />
     </div>
@@ -71,6 +74,7 @@ const ImageElements = ({
   height,
   noPauseButton,
   cover,
+  borderRadius,
   ...rest
 }) => {
   const reduceMotion = useReducedMotion();
@@ -83,6 +87,9 @@ const ImageElements = ({
   const isVideo = getIsVideo(src);
   const showFullRes = inViewport;
   const hasMounted = useHasMounted();
+  const elementStyle = {
+    borderRadius: borderRadius ? `${borderRadius}px` : undefined,
+  };
 
   useEffect(() => {
     const resolveVideoSrc = async () => {
@@ -146,7 +153,7 @@ const ImageElements = ({
       className={styles.elementWrapper}
       data-reveal={reveal}
       data-visible={inViewport || loaded}
-      style={cssProps({ delay: numToMs(delay + 1000) })}
+      style={cssProps({ delay: numToMs(delay + 1000), borderRadius: borderRadius ? `${borderRadius}px` : undefined })}
     >
       {isVideo && hasMounted && (
         <Fragment>
@@ -162,6 +169,7 @@ const ImageElements = ({
             src={videoSrc}
             aria-label={alt}
             ref={videoRef}
+            style={elementStyle}
             {...rest}
           />
           {!noPauseButton && (
@@ -185,6 +193,7 @@ const ImageElements = ({
           height={height}
           alt={alt}
           sizes={sizes}
+          style={elementStyle}
           {...rest}
         />
       )}
@@ -194,7 +203,7 @@ const ImageElements = ({
           className={styles.placeholder}
           data-loaded={loaded}
           data-cover={cover}
-          style={cssProps({ delay: numToMs(delay) })}
+          style={{ ...elementStyle, ...cssProps({ delay: numToMs(delay) }) }}
           ref={placeholderRef}
           src={placeholder}
           width={width}
