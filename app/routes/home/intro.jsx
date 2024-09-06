@@ -7,7 +7,7 @@ import { Transition } from '~/components/transition';
 import { VisuallyHidden } from '~/components/visually-hidden';
 import { Link as RouterLink } from '@remix-run/react';
 import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState, useRef } from 'react';
 import { cssProps } from '~/utils/style';
 import config from '~/config.json';
 import { useHydrated } from '~/hooks/useHydrated';
@@ -21,19 +21,21 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const { theme } = useTheme();
   const { disciplines } = config;
   const [disciplineIndex, setDisciplineIndex] = useState(0);
+  const [typedDiscipline, setTypedDiscipline] = useState('');
+  const [showCaret, setShowCaret] = useState(true);
   const prevTheme = usePrevious(theme);
-  const introLabel = [disciplines.slice(0, -1).join(', '), disciplines.slice(-1)[0]].join(
-    ', and '
-  );
+  const introLabel = disciplines.join(', ');
   const currentDiscipline = disciplines.find((item, index) => index === disciplineIndex);
   const titleId = `${id}-title`;
   const scrollToHash = useScrollToHash();
   const isHydrated = useHydrated();
+  const caretRef = useRef(null);
 
   useInterval(
     () => {
       const index = (disciplineIndex + 1) % disciplines.length;
       setDisciplineIndex(index);
+      setTypedDiscipline('');
     },
     5000,
     theme
@@ -42,8 +44,31 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   useEffect(() => {
     if (prevTheme && prevTheme !== theme) {
       setDisciplineIndex(0);
+      setTypedDiscipline('');
     }
   }, [theme, prevTheme]);
+
+  useEffect(() => {
+    if (currentDiscipline && typedDiscipline.length < currentDiscipline.length) {
+      const timer = setTimeout(() => {
+        setTypedDiscipline(currentDiscipline.slice(0, typedDiscipline.length + 1));
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [currentDiscipline, typedDiscipline]);
+
+  useEffect(() => {
+    if (caretRef.current) {
+      caretRef.current.style.left = `${typedDiscipline.length * 0.6}em`;
+    }
+  }, [typedDiscipline]);
+
+  useEffect(() => {
+    const caretInterval = setInterval(() => {
+      setShowCaret(prev => !prev);
+    }, 500);
+    return () => clearInterval(caretInterval);
+  }, []);
 
   const handleScrollClick = event => {
     event.preventDefault();
@@ -74,7 +99,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
               </h1>
               <Heading level={0} as="h2" className={styles.title}>
                 <VisuallyHidden className={styles.label}>
-                  {`${config.role} + ${introLabel}`}
+                  {`${config.role} ${introLabel}`}
                 </VisuallyHidden>
                 <span aria-hidden className={styles.row}>
                   <span
@@ -84,31 +109,23 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
                   >
                     {config.role}
                   </span>
-                  <span className={styles.line} data-status={status} />
                 </span>
-                <div className={styles.row}>
-                  {disciplines.map(item => (
-                    <Transition
-                      unmount
-                      in={item === currentDiscipline}
-                      timeout={{ enter: 3000, exit: 2000 }}
-                      key={item}
+                <span aria-hidden className={styles.row}>
+                  <span
+                    className={styles.word}
+                    data-status={status}
+                    style={cssProps({ delay: tokens.base.durationL })}
+                  >
+                    {typedDiscipline}
+                    <span 
+                      className={styles.caret} 
+                      ref={caretRef}
+                      style={{ opacity: showCaret ? 1 : 0 }}
                     >
-                      {({ status, nodeRef }) => (
-                        <span
-                          aria-hidden
-                          ref={nodeRef}
-                          className={styles.word}
-                          data-plus={true}
-                          data-status={status}
-                          style={cssProps({ delay: tokens.base.durationL })}
-                        >
-                          {item}
-                        </span>
-                      )}
-                    </Transition>
-                  ))}
-                </div>
+                      |
+                    </span>
+                  </span>
+                </span>
               </Heading>
             </header>
             <RouterLink
