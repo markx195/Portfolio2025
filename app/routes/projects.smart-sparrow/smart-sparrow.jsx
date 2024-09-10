@@ -32,12 +32,14 @@ export const meta = () => {
 
 import broomImage from '~/assets/broom.png';
 import biNoteImage from '~/assets/binote.png';
+import ioitImage from '~/assets/ioit.png';
+import portfolioM from '~/assets/portfolioM.png'
 
 const projects = [
   {
-    name: 'IOIT',
-    image: biNoteImage,
-    description: 'This project is designed to foster a reading culture among company employees by tracking individual reading progress and creating a collaborative learning environment. The platform allows users to monitor how many books they have read, view reading statistics, and engage in discussions. It also offers a study hour feature where employees can exchange insights. Additionally, the website tracks reading time and provides a note-taking functionality, similar to Notion, where users can document their thoughts and reflections as they read.',
+    name: 'DT40 DaLieu IOIT WEB/APP',
+    image: ioitImage,
+    description: 'Project focused on dermatology, which involved the development of an advanced system for managing dermatological records and utilizing artificial intelligence for skin analysis. The system was designed to facilitate the diagnosis of skin conditions by analyzing images, providing an innovative approach to healthcare record management.',
   },
   {
     name: 'Broom',
@@ -51,8 +53,13 @@ const projects = [
   },
   {
     name: 'Portfolio',
-    image: biNoteImage,
+    image: portfolioM,
     description: '2024 Portfolio'
+  },
+  {
+    name: 'Coming soon...',
+    image: null,
+    description: 'More exciting projects are in the works. Stay tuned for updates!',
   },
   // Add more projects as needed
 ];
@@ -62,16 +69,18 @@ export const SmartSparrow = () => {
   const isDark = theme === 'dark';
 
   const imageWrapperStyle = {
-    width: '300px',
-    height: '188px',
+    width: '100%',
+    maxWidth: '600px',
+    height: 'auto',
     position: 'relative',
     overflow: 'hidden',
     borderRadius: '15px',
+    margin: '20px auto',
   };
 
   const imageStyle = {
     width: '100%',
-    height: '100%',
+    height: 'auto',
     objectFit: 'cover',
   };
 
@@ -96,16 +105,18 @@ export const SmartSparrow = () => {
                 <ProjectSectionHeading>{project.name}</ProjectSectionHeading>
                 <ProjectSectionText>{project.description}</ProjectSectionText>
               </ProjectTextRow>
-              <div style={imageWrapperStyle}>
-                <Image
-                  srcSet={`${project.image} 300w, ${project.image} 600w, ${project.image} 900w`}
-                  src={project.image}
-                  placeholder={project.image}
-                  alt={`Screenshot of ${project.name}`}
-                  sizes={`(max-width: ${media.mobile}px) 100vw, (max-width: ${media.tablet}px) 80vw, 70vw`}
-                  style={imageStyle}
-                />
-              </div>
+              {project.image && (
+                <div style={imageWrapperStyle}>
+                  <Image
+                    srcSet={`${project.image} 300w, ${project.image} 600w, ${project.image} 900w`}
+                    src={project.image}
+                    placeholder={project.image}
+                    alt={`Screenshot of ${project.name}`}
+                    sizes={`(max-width: ${media.mobile}px) 100vw, (max-width: ${media.tablet}px) 80vw, 70vw`}
+                    style={imageStyle}
+                  />
+                </div>
+              )}
             </ProjectSectionContent>
           </ProjectSection>
         ))}
