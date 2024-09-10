@@ -1,8 +1,8 @@
 {
   "name": "portfolio",
-  "homepage": "https://hamishw.com",
+  "homepage": "quanganh-mark.vercel.app",
   "description": "Portfolio site for Quang Anh",
-  "repository": "https://github.com/HamishMW/portfolio.git",
+  "repository": "https://github.com/markx195/Portfolio2025",
   "author": "Quang Anh",
   "sideEffects": false,
   "type": "module",
