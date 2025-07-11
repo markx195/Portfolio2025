@@ -1,32 +1,5 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "build/client",
-  "framework": "remix",
-  "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "functions": {
-    "build/server/index.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/build/server/index.js"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/build/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "framework": "remix"
 } 
