@@ -51,7 +51,7 @@ const StyledButton = styled.button`
   padding: 8px 12px;
   font-size: 14px;
   color: dimgrey;
-  background-color: ${props => props.color};
+  background-color: var(--color);
 `;
 ```
 
@@ -63,7 +63,7 @@ Traditionally, we'd use css classes and concatenate strings. This always felt me
 function Button({ color, size, primary, children }) {
   return (
     <button
-      className={['button', `button--${size}`, primary ? 'button--primary' : null]
+      className={['button', 'button--' + size, primary ? 'button--primary' : null]
         .filter(Boolean)
         .join(' ')}
       style={{ backgroundColor: color }}
@@ -209,7 +209,7 @@ This also makes it really convenient when working with properties like transform
 // polluting our jsx with the full transform in the inline style
 function Button({ offset, children }) {
   return (
-    <button className="button" style={{ '--offset': `${offset}px` }}>
+    <button className="button" style={{ '--offset': offset + 'px' }}>
       {children}
     </button>
   );

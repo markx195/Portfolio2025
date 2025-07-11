@@ -1,0 +1,22 @@
+# Ignore development files
+.dev.vars
+.dev.vars.example
+.cache/
+.wrangler/
+node_modules/
+
+# Ignore build artifacts that shouldn't be deployed
+build/
+dist/
+
+# Ignore git files
+.git/
+.gitignore
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db 

@@ -18,9 +18,12 @@ Consider a button component styled with traditional CSS:
 
 ```js
 function Button({ color, size, primary, children }) {
+  const sizeClass = 'button--' + size;
+  const primaryClass = primary ? 'button--primary' : '';
+  const className = ['button', sizeClass, primaryClass].filter(Boolean).join(' ');
+  
   return (
-    <button className={`button button--${size} ${primary ? 'button--primary' : ''}`} 
-            style={{ backgroundColor: color }}>
+    <button className={className} style={{ backgroundColor: color }}>
       {children}
     </button>
   );
@@ -66,11 +69,12 @@ Here’s how you can style a button component using Tailwind CSS:
 ```jsx
 function Button({ color, size, primary, children }) {
   const baseClasses = "border-0 rounded px-3 py-2 text-sm text-gray-800";
-  const colorClasses = primary ? "bg-blue-500" : `bg-[${color}]`;
+  const colorClasses = primary ? "bg-blue-500" : "bg-[" + color + "]";
   const sizeClasses = size === 'small' ? "h-8" : size === 'medium' ? "h-10" : "h-12";
+  const className = baseClasses + " " + colorClasses + " " + sizeClasses;
 
   return (
-    <button className={`${baseClasses} ${colorClasses} ${sizeClasses}`}>
+    <button className={className}>
       {children}
     </button>
   );
@@ -90,8 +94,9 @@ Here’s how you can style a button component using Bootstrap 5:
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Button({ color, size, primary, children }) {
-  const buttonClass = `btn ${primary ? 'btn-primary' : `btn-${color}`} 
-  ${size === 'small' ? 'btn-sm' : size === 'medium' ? 'btn-md' : 'btn-lg'}`;
+  const primaryClass = primary ? 'btn-primary' : 'btn-' + color;
+  const sizeClass = size === 'small' ? 'btn-sm' : size === 'medium' ? 'btn-md' : 'btn-lg';
+  const buttonClass = 'btn ' + primaryClass + ' ' + sizeClass;
 
   return (
     <button className={buttonClass}>
