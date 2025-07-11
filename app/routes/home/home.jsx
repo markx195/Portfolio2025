@@ -34,8 +34,10 @@ export const links = () => {
 
 export const meta = () => {
   return baseMeta({
-    title: 'Designer + Developer',
-    description: `Design portfolio of ${config.name} — a product designer working on web & mobile apps with a focus on motion, experience design, and accessibility.`,
+    title: 'Web Developer & Front-end Developer',
+    description: `Portfolio of ${config.name} — a skilled web developer and front-end specialist working on modern web applications with a focus on React, Vue.js, and innovative user experiences.`,
+    keywords: 'web developer, front-end developer, React, Vue.js, JavaScript, portfolio',
+    ogType: 'website',
   });
 };
 

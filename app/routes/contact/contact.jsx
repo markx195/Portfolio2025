@@ -22,7 +22,9 @@ export const meta = () => {
   return baseMeta({
     title: 'Contact',
     description:
-      'Send me a message if you’re interested in discussing a project or if you just want to say hi',
+      "Get in touch with me to discuss potential projects, collaborations, or just to say hello. I'm always interested in new opportunities and interesting conversations.",
+    keywords: 'contact, hire, collaboration, web development, front-end development',
+    ogType: 'website',
   });
 };
 
@@ -70,27 +72,36 @@ export async function action({ context, request }) {
   }
 
   // Send email via Amazon SES
-  await ses.send(
-    new SendEmailCommand({
-      Destination: {
-        ToAddresses: [context.cloudflare.env.EMAIL],
-      },
-      Message: {
-        Body: {
-          Text: {
-            Data: `From: ${email}\n\n${message}`,
+  try {
+    await ses.send(
+      new SendEmailCommand({
+        Destination: {
+          ToAddresses: [context.cloudflare.env.EMAIL],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `From: ${email}\n\n${message}`,
+            },
+          },
+          Subject: {
+            Data: `Portfolio message from ${email}`,
           },
         },
-        Subject: {
-          Data: `Portfolio message from ${email}`,
-        },
-      },
-      Source: `Portfolio <${context.cloudflare.env.FROM_EMAIL}>`,
-      ReplyToAddresses: [email],
-    })
-  );
+        Source: `Portfolio <${context.cloudflare.env.FROM_EMAIL}>`,
+        ReplyToAddresses: [email],
+      })
+    );
 
-  return json({ success: true });
+    return json({ success: true });
+  } catch (error) {
+    console.error('Email sending failed:', error);
+    return json({ 
+      errors: { 
+        general: 'Failed to send message. Please try again later or contact me directly.' 
+      } 
+    }, { status: 500 });
+  }
 }
 
 export const Contact = () => {
@@ -176,6 +187,7 @@ export const Contact = () => {
                       <Icon className={styles.formErrorIcon} icon="error" />
                       {actionData?.errors?.email}
                       {actionData?.errors?.message}
+                      {actionData?.errors?.general}
                     </div>
                   </div>
                 </div>

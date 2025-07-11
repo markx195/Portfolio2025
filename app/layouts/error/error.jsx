@@ -18,9 +18,9 @@ export function Error({ error }) {
     switch (error.status) {
       case 404:
         return {
-          summary: 'Error: redacted',
+          summary: 'Page Not Found',
           message:
-            'This page could not be found. It either doesn’t exist or was deleted. Or perhaps you don’t exist and this webpage couldn’t find you.',
+            'The page you\'re looking for doesn\'t exist. It may have been moved, deleted, or you entered the wrong URL. Please check the address and try again.',
         };
       case 405:
         return {

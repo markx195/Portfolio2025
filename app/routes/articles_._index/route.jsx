@@ -1,21 +1,20 @@
-import { baseMeta } from '~/utils/meta';
+import { Articles } from './articles';
 import { getPosts } from './posts.server';
 import { json } from '@remix-run/cloudflare';
+import { useRouteError } from '@remix-run/react';
+import { Error } from '~/layouts/error';
 
 export async function loader() {
-  const allPosts = await getPosts();
-  const featured = allPosts.filter(post => post.frontmatter.featured)[0];
-  const posts = allPosts.filter(post => featured?.slug !== post.slug);
-
-  return json({ posts, featured });
+  const posts = await getPosts();
+  const featured = posts.find(post => post.frontmatter.featured);
+  const regularPosts = posts.filter(post => !post.frontmatter.featured);
+  
+  return json({ posts: regularPosts, featured });
 }
 
-export function meta() {
-  return baseMeta({
-    title: 'Articles',
-    description:
-      'A collection of technical design and development articles. May contain incoherent ramblings.',
-  });
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return <Error error={error} />;
 }
 
-export { Articles as default } from './articles';
+export default Articles;

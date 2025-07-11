@@ -147,12 +147,12 @@ export const Navbar = () => {
         to={location.pathname === '/' ? '/#intro' : '/'}
         data-navbar-item
         className={styles.logo}
-        aria-label={`${config.name}, ${config.role}`}
+        aria-label={`${config.name}, ${config.role} - Go to homepage`}
         onClick={handleMobileNavClick}
       >
         <Monogram highlight />
       </RouterLink>
-      <NavToggle onClick={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} />
+      <NavToggle onClick={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} data-nav-toggle />
       <nav className={styles.nav}>
         <div className={styles.navList}>
           {navLinks.map(({ label, pathname }) => (
@@ -165,6 +165,7 @@ export const Navbar = () => {
               className={styles.navLink}
               aria-current={getCurrent(pathname)}
               onClick={handleNavItemClick}
+              aria-label={`Navigate to ${label} section`}
             >
               {label}
             </RouterLink>
@@ -174,25 +175,26 @@ export const Navbar = () => {
       </nav>
       <Transition unmount in={menuOpen} timeout={msToNum(tokens.base.durationL)}>
         {({ visible, nodeRef }) => (
-          <nav className={styles.mobileNav} data-visible={visible} ref={nodeRef}>
+          <nav className={styles.mobileNav} data-visible={visible} data-mobile-nav ref={nodeRef}>
             {navLinks.map(({ label, pathname }, index) => (
-              <RouterLink
-                unstable_viewTransition
-                prefetch="intent"
-                to={pathname}
-                key={label}
-                className={styles.mobileNavLink}
-                data-visible={visible}
-                aria-current={getCurrent(pathname)}
-                onClick={handleMobileNavClick}
-                style={cssProps({
-                  transitionDelay: numToMs(
-                    Number(msToNum(tokens.base.durationS)) + index * 50
-                  ),
-                })}
-              >
-                {label}
-              </RouterLink>
+                          <RouterLink
+              unstable_viewTransition
+              prefetch="intent"
+              to={pathname}
+              key={label}
+              className={styles.mobileNavLink}
+              data-visible={visible}
+              aria-current={getCurrent(pathname)}
+              onClick={handleMobileNavClick}
+              aria-label={`Navigate to ${label} section`}
+              style={cssProps({
+                transitionDelay: numToMs(
+                  Number(msToNum(tokens.base.durationS)) + index * 50
+                ),
+              })}
+            >
+              {label}
+            </RouterLink>
             ))}
             <NavbarIcons />
             <ThemeToggle isMobile />

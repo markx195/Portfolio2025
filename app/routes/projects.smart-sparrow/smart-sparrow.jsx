@@ -39,29 +39,33 @@ const projects = [
   {
     name: 'DT40 DaLieu IOIT WEB/APP',
     image: ioitImage,
-    description: 'Project focused on dermatology, which involved the development of an advanced system for managing dermatological records and utilizing artificial intelligence for skin analysis. The system was designed to facilitate the diagnosis of skin conditions by analyzing images, providing an innovative approach to healthcare record management.',
+    description: 'An advanced dermatology management system with AI-powered skin analysis capabilities. Built with modern web technologies, this application helps healthcare professionals diagnose skin conditions through image analysis, providing an innovative approach to dermatological record management and patient care.',
+    technologies: ['React', 'Node.js', 'AI/ML', 'Healthcare APIs'],
   },
   {
     name: 'Broom',
     image: broomImage,
-    description: 'A Vue.js-based project that simulates Airbnb functionality, featuring dynamic property listings, interactive maps, advanced search filters, and a responsive user interface. The app includes a booking system, offering a seamless experience for users to explore and book accommodations.',
+    description: 'A comprehensive Vue.js-based accommodation booking platform inspired by Airbnb. Features include dynamic property listings, interactive maps with location services, advanced search and filtering capabilities, and a complete booking management system with user authentication and payment processing.',
+    technologies: ['Vue.js', 'Vuex', 'Vue Router', 'Map APIs', 'Payment Integration'],
   },
   {
     name: 'Bi-note',
     image: biNoteImage,
-    description: 'This project is designed to foster a reading culture among company employees by tracking individual reading progress and creating a collaborative learning environment. The platform allows users to monitor how many books they have read, view reading statistics, and engage in discussions. It also offers a study hour feature where employees can exchange insights. Additionally, the website tracks reading time and provides a note-taking functionality, similar to Notion, where users can document their thoughts and reflections as they read.',
+    description: 'A collaborative reading platform designed to foster learning culture within organizations. The system tracks individual reading progress, provides detailed analytics, and enables team discussions. Features include study hour scheduling, note-taking capabilities similar to Notion, and comprehensive reading statistics to encourage continuous learning.',
+    technologies: ['React', 'Node.js', 'Real-time Features', 'Analytics', 'Collaboration Tools'],
   },
   {
-    name: 'Portfolio',
+    name: 'Portfolio 2024',
     image: portfolioM,
-    description: '2024 Portfolio'
+    description: 'A modern, responsive portfolio website showcasing my work and skills. Built with Remix and featuring smooth animations, 3D elements, and a focus on accessibility and performance.',
+    technologies: ['Remix', 'React', 'Three.js', 'CSS Modules', 'Vite'],
   },
   {
     name: 'Coming soon...',
     image: null,
-    description: 'More exciting projects are in the works. Stay tuned for updates!',
+    description: 'More exciting projects are in development. Stay tuned for updates on new web applications, mobile apps, and innovative solutions!',
+    technologies: ['In Development'],
   },
-  // Add more projects as needed
 ];
 
 export const SmartSparrow = () => {
@@ -104,6 +108,30 @@ export const SmartSparrow = () => {
               <ProjectTextRow>
                 <ProjectSectionHeading>{project.name}</ProjectSectionHeading>
                 <ProjectSectionText>{project.description}</ProjectSectionText>
+                {project.technologies && (
+                  <div style={{ marginTop: '16px' }}>
+                    <Text size="s" as="p" style={{ marginBottom: '8px', fontWeight: '500' }}>
+                      Technologies:
+                    </Text>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {project.technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          style={{
+                            background: 'var(--accent)',
+                            color: 'var(--black)',
+                            padding: '4px 8px',
+                            borderRadius: '4px',
+                            fontSize: '12px',
+                            fontWeight: '500',
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </ProjectTextRow>
               {project.image && (
                 <div style={imageWrapperStyle}>
