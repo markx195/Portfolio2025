@@ -10,7 +10,7 @@ import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
 import { Suspense, lazy, useEffect, useState, useRef } from 'react';
 import { cssProps } from '~/utils/style';
 import config from '~/config.json';
-import { useHydrated } from '~/hooks/useHydrated';
+import { useHydrated } from '~/hooks';
 import styles from './intro.module.css';
 
 const DisplacementSphere = lazy(() =>

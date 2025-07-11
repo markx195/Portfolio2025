@@ -1,6 +1,6 @@
 import config from '~/config.json';
 
-const { name, url, twitter } = config;
+const { name, url, github } = config;
 const defaultOgImage = `${url}/social-image.png`;
 
 export function baseMeta({
@@ -28,7 +28,7 @@ export function baseMeta({
     { property: 'twitter:description', content: description },
     { property: 'twitter:title', content: titleText },
     { property: 'twitter:site', content: url },
-    { property: 'twitter:creator', content: twitter },
+    { property: 'twitter:creator', content: `@${github}` },
     { property: 'twitter:image', content: ogImage },
   ];
 }
