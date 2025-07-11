@@ -3,6 +3,7 @@ import backgroundSprPlaceholder from '~/assets/spr-background-placeholder.jpg';
 import backgroundSpr from '~/assets/spr-background.jpg';
 import { Footer } from '~/components/footer';
 import { Image } from '~/components/image';
+import { Text } from '~/components/text';
 import {
   ProjectBackground,
   ProjectContainer,

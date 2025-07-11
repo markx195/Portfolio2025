@@ -1,7 +1,7 @@
 const CACHE_NAME = 'portfolio-v1';
 const urlsToCache = [
   '/',
-  '/static/social-image.png',
+  '/social-image.png',
   '/static/favicon.ico',
   '/static/manifest.json',
 ];
