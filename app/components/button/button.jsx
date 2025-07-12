@@ -18,7 +18,6 @@ export const Button = forwardRef(({ href, ...rest }, ref) => {
   return (
     <ButtonContent
       as={Link}
-      prefetch="intent"
       to={href}
       ref={ref}
       {...rest}
@@ -43,6 +42,7 @@ const ButtonContent = forwardRef(
       target,
       href,
       disabled,
+      onClick,
       ...rest
     },
     ref
@@ -50,6 +50,20 @@ const ButtonContent = forwardRef(
     const isExternal = isExternalLink(href);
     const defaultComponent = href ? 'a' : 'button';
     const Component = as || defaultComponent;
+
+    const handleClick = (event) => {
+      // Prevent form submission on hover events
+      if (event.type === 'mouseenter' || event.type === 'mouseover') {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      
+      // Call original onClick if provided
+      if (onClick) {
+        onClick(event);
+      }
+    };
 
     return (
       <Component
@@ -63,6 +77,7 @@ const ButtonContent = forwardRef(
         target={target || isExternal ? '_blank' : undefined}
         disabled={disabled}
         ref={ref}
+        onClick={handleClick}
         {...rest}
       >
         {!!icon && (
