@@ -1,15 +1,23 @@
 const CACHE_NAME = 'portfolio-v1';
 const urlsToCache = [
   '/',
-  '/social-image.png',
-  '/static/favicon.ico',
-  '/static/manifest.json',
+  '/favicon.ico',
+  '/manifest.json',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+      .then((cache) => {
+        // Add each URL individually with error handling
+        return Promise.allSettled(
+          urlsToCache.map(url => 
+            cache.add(url).catch(err => {
+              console.warn(`Failed to cache ${url}:`, err);
+            })
+          )
+        );
+      })
   );
 });
 
