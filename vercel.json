@@ -1,5 +1,10 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "build/client",
-  "framework": "remix"
+  "framework": "remix",
+  "functions": {
+    "app/routes/api.set-theme.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
 } 
