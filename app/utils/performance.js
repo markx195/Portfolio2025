@@ -40,13 +40,30 @@ export function initPerformanceMonitoring() {
 
     // Cumulative Layout Shift
     let clsValue = 0;
+    let lastLoggedValue = 0;
+    let logTimeout = null;
+    
     new PerformanceObserver((list) => {
       const entries = list.getEntries();
       entries.forEach((entry) => {
         if (!entry.hadRecentInput) {
           clsValue += entry.value;
-          if (isDevelopment) {
-            console.log('CLS:', clsValue);
+          
+          // Only log if there's a significant change or if it's the first few values
+          const significantChange = Math.abs(clsValue - lastLoggedValue) > 0.01;
+          const isEarlyValue = clsValue < 0.01;
+          
+          if (isDevelopment && (significantChange || isEarlyValue)) {
+            // Clear existing timeout
+            if (logTimeout) {
+              clearTimeout(logTimeout);
+            }
+            
+            // Throttle logging to prevent spam
+            logTimeout = setTimeout(() => {
+              console.log('CLS:', clsValue.toFixed(6));
+              lastLoggedValue = clsValue;
+            }, 100);
           }
           
           if (clsValue > 0.1) {

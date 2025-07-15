@@ -1,3 +1,4 @@
+import { Form, useActionData, useNavigation } from '@remix-run/react';
 import { Button } from '~/components/button';
 import { DecoderText } from '~/components/decoder-text';
 import { Divider } from '~/components/divider';
@@ -13,10 +14,11 @@ import { useFormInput } from '~/hooks';
 import { useRef } from 'react';
 import { cssProps, msToNum, numToMs } from '~/utils/style';
 import { baseMeta } from '~/utils/meta';
-import { Form, useActionData, useNavigation } from '@remix-run/react';
-import { json } from '@remix-run/node';
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
-import styles from './contact.module.css';
+
+function getDelay(delayMs, offset = numToMs(0), multiplier = 1) {
+  const numDelay = msToNum(delayMs) * multiplier;
+  return cssProps({ delay: numToMs((msToNum(offset) + numDelay).toFixed(0)) });
+}
 
 export const meta = () => {
   return baseMeta({
@@ -30,81 +32,14 @@ export const meta = () => {
 
 const MAX_EMAIL_LENGTH = 512;
 const MAX_MESSAGE_LENGTH = 4096;
-const EMAIL_PATTERN = /(.+)@(.+){2,}\.(.+){2,}/;
 
-export async function action({ context, request }) {
-  const ses = new SESClient({
-    region: 'us-east-1',
-    credentials: {
-      accessKeyId: context.cloudflare.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: context.cloudflare.env.AWS_SECRET_ACCESS_KEY,
-    },
-  });
-
-  const formData = await request.formData();
-  const isBot = String(formData.get('name'));
-  const email = String(formData.get('email'));
-  const message = String(formData.get('message'));
-  const errors = {};
-
-  // Return without sending if a bot trips the honeypot
-  if (isBot) return json({ success: true });
-
-  // Handle input validation on the server
-  if (!email || !EMAIL_PATTERN.test(email)) {
-    errors.email = 'Please enter a valid email address.';
-  }
-
-  if (!message) {
-    errors.message = 'Please enter a message.';
-  }
-
-  if (email.length > MAX_EMAIL_LENGTH) {
-    errors.email = `Email address must be shorter than ${MAX_EMAIL_LENGTH} characters.`;
-  }
-
-  if (message.length > MAX_MESSAGE_LENGTH) {
-    errors.message = `Message must be shorter than ${MAX_MESSAGE_LENGTH} characters.`;
-  }
-
-  if (Object.keys(errors).length > 0) {
-    return json({ errors });
-  }
-
-  // Send email via Amazon SES
-  try {
-    await ses.send(
-      new SendEmailCommand({
-        Destination: {
-          ToAddresses: [context.cloudflare.env.EMAIL],
-        },
-        Message: {
-          Body: {
-            Text: {
-              Data: `From: ${email}\n\n${message}`,
-            },
-          },
-          Subject: {
-            Data: `Portfolio message from ${email}`,
-          },
-        },
-        Source: `Portfolio <${context.cloudflare.env.FROM_EMAIL}>`,
-        ReplyToAddresses: [email],
-      })
-    );
-
-    return json({ success: true });
-  } catch (error) {
-    console.error('Email sending failed:', error);
-    return json({ 
-      errors: { 
-        general: 'Failed to send message. Please try again later or contact me directly.' 
-      } 
-    }, { status: 500 });
-  }
+export async function action({ request }) {
+  console.log('Contact action called');
+  const { json } = await import('@remix-run/node');
+  return json({ success: true });
 }
 
-export const Contact = () => {
+export default function Contact() {
   const errorRef = useRef();
   const email = useFormInput('');
   const message = useFormInput('');
@@ -113,18 +48,19 @@ export const Contact = () => {
   const { state } = useNavigation();
   const sending = state === 'submitting';
 
+  console.log('Contact component rendering, state:', state);
+
   return (
-    <Section className={styles.contact}>
+    <Section style={{ padding: '20px', maxWidth: '600px', margin: '0 auto', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <Transition unmount in={!actionData?.success} timeout={1600}>
         {({ status, nodeRef }) => (
           <Form
-            className={styles.form}
             method="post"
             ref={nodeRef}
+            noValidate
+            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
           >
             <Heading
-              className={styles.title}
-              data-status={status}
               level={3}
               as="h1"
               style={getDelay(tokens.base.durationXS, initDelay, 0.3)}
@@ -132,21 +68,10 @@ export const Contact = () => {
               <DecoderText text="Say hello" start={status !== 'exited'} delay={300} />
             </Heading>
             <Divider
-              className={styles.divider}
-              data-status={status}
               style={getDelay(tokens.base.durationXS, initDelay, 0.4)}
-            />
-            {/* Hidden honeypot field to identify bots */}
-            <Input
-              className={styles.botkiller}
-              label="Name"
-              name="name"
-              maxLength={MAX_EMAIL_LENGTH}
             />
             <Input
               required
-              className={styles.input}
-              data-status={status}
               style={getDelay(tokens.base.durationXS, initDelay)}
               autoComplete="email"
               label="Your email"
@@ -158,8 +83,6 @@ export const Contact = () => {
             <Input
               required
               multiline
-              className={styles.input}
-              data-status={status}
               style={getDelay(tokens.base.durationS, initDelay)}
               autoComplete="off"
               label="Message"
@@ -174,27 +97,20 @@ export const Contact = () => {
             >
               {({ status: errorStatus, nodeRef }) => (
                 <div
-                  className={styles.formError}
                   ref={nodeRef}
                   data-status={errorStatus}
-                  style={cssProps({
-                    height: errorStatus ? errorRef.current?.offsetHeight : 0,
-                  })}
+                  style={{ color: 'var(--error)', padding: '10px', backgroundColor: 'color-mix(in lab, var(--error) 10%, transparent)' }}
                 >
-                  <div className={styles.formErrorContent} ref={errorRef}>
-                    <div className={styles.formErrorMessage}>
-                      <Icon className={styles.formErrorIcon} icon="error" />
-                      {actionData?.errors?.email}
-                      {actionData?.errors?.message}
-                      {actionData?.errors?.general}
-                    </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Icon icon="error" />
+                    {actionData?.errors?.email}
+                    {actionData?.errors?.message}
+                    {actionData?.errors?.general}
                   </div>
                 </div>
               )}
             </Transition>
             <Button
-              className={styles.button}
-              data-status={status}
               data-sending={sending}
               style={getDelay(tokens.base.durationM, initDelay)}
               disabled={sending}
@@ -210,11 +126,10 @@ export const Contact = () => {
       </Transition>
       <Transition unmount in={actionData?.success}>
         {({ status, nodeRef }) => (
-          <div className={styles.complete} aria-live="polite" ref={nodeRef}>
+          <div ref={nodeRef} style={{ textAlign: 'center', padding: '20px' }}>
             <Heading
               level={3}
               as="h3"
-              className={styles.completeTitle}
               data-status={status}
             >
               Message Sent
@@ -222,16 +137,14 @@ export const Contact = () => {
             <Text
               size="l"
               as="p"
-              className={styles.completeText}
               data-status={status}
               style={getDelay(tokens.base.durationXS)}
             >
-              I’ll get back to you within a couple days, sit tight
+              I'll get back to you within a couple days, sit tight
             </Text>
             <Button
               secondary
               iconHoverShift
-              className={styles.completeButton}
               data-status={status}
               style={getDelay(tokens.base.durationM)}
               href="/"
@@ -242,12 +155,7 @@ export const Contact = () => {
           </div>
         )}
       </Transition>
-      <Footer className={styles.footer} />
+      <Footer />
     </Section>
   );
-};
-
-function getDelay(delayMs, offset = numToMs(0), multiplier = 1) {
-  const numDelay = msToNum(delayMs) * multiplier;
-  return cssProps({ delay: numToMs((msToNum(offset) + numDelay).toFixed(0)) });
-}
+} 

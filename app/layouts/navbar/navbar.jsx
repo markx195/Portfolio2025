@@ -142,7 +142,6 @@ export const Navbar = () => {
   return (
     <header className={styles.navbar} ref={headerRef}>
       <RouterLink
-        prefetch="intent"
         to={location.pathname === '/' ? '/#intro' : '/'}
         data-navbar-item
         className={styles.logo}
@@ -156,7 +155,6 @@ export const Navbar = () => {
         <div className={styles.navList}>
           {navLinks.map(({ label, pathname }) => (
             <RouterLink
-              prefetch="intent"
               to={pathname}
               key={label}
               data-navbar-item
@@ -173,25 +171,24 @@ export const Navbar = () => {
       </nav>
       <Transition unmount in={menuOpen} timeout={msToNum(tokens.base.durationL)}>
         {({ visible, nodeRef }) => (
-          <nav className={styles.mobileNav} data-visible={visible} data-mobile-nav ref={nodeRef}>
+          <nav className={styles.nav} data-visible={visible} data-mobile-nav ref={nodeRef}>
             {navLinks.map(({ label, pathname }, index) => (
-                          <RouterLink
-              prefetch="intent"
-              to={pathname}
-              key={label}
-              className={styles.mobileNavLink}
-              data-visible={visible}
-              aria-current={getCurrent(pathname)}
-              onClick={handleMobileNavClick}
-              aria-label={`Navigate to ${label} section`}
-              style={cssProps({
-                transitionDelay: numToMs(
-                  Number(msToNum(tokens.base.durationS)) + index * 50
-                ),
-              })}
-            >
-              {label}
-            </RouterLink>
+              <RouterLink
+                to={pathname}
+                key={label}
+                className={styles.mobileNavLink}
+                data-visible={visible}
+                aria-current={getCurrent(pathname)}
+                onClick={handleMobileNavClick}
+                aria-label={`Navigate to ${label} section`}
+                style={cssProps({
+                  transitionDelay: numToMs(
+                    Number(msToNum(tokens.base.durationS)) + index * 50
+                  ),
+                })}
+              >
+                {label}
+              </RouterLink>
             ))}
             <NavbarIcons />
             <ThemeToggle isMobile />

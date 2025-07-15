@@ -53,7 +53,7 @@ export function ProjectHeader({
                 style={cssProps({ delay: numToMs(initDelay + 300 + index * 140) })}
                 key={role}
               >
-                <Text secondary>{role}</Text>
+                <Text secondary as="span">{role}</Text>
               </li>
             ))}
           </ul>
