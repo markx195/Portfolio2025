@@ -2,8 +2,8 @@ const CACHE_NAME = 'portfolio-v1';
 const urlsToCache = [
   '/',
   '/social-image.png',
-  '/static/favicon.ico',
-  '/static/manifest.json',
+  '/favicon.ico',
+  '/manifest.json',
 ];
 
 self.addEventListener('install', (event) => {

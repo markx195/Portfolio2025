@@ -2,7 +2,7 @@ export function initPerformanceMonitoring() {
   if (typeof window === 'undefined') return;
 
   // Only log in development
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = import.meta.env.MODE === 'development';
 
   // Track Core Web Vitals
   if ('PerformanceObserver' in window) {
@@ -79,7 +79,7 @@ export function trackUserInteraction(action, data = {}) {
     ...data,
   };
 
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.MODE === 'development') {
     console.log('User interaction:', event);
   }
   
